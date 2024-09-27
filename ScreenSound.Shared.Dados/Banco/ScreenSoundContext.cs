@@ -21,7 +21,7 @@ namespace ScreenSound.Banco
         {
             optionsBuilder
                 .UseSqlServer(connectionString)
-                .UseLazyLoadingProxies();
+                .UseLazyLoadingProxies(false);
         }      
     }
 }
