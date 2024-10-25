@@ -1,4 +1,5 @@
 ﻿@page "/EditarArtista/{NomeArtista}"
+@using ScreenSound.Web.Requests
 
 @inject ArtistaAPI artistaAPI
 @inject NavigationManager navigationManager
@@ -48,6 +49,7 @@
 @code {
     private string? nome;
     private string? biografia;
+    private string? FotoPerfil;
     [Parameter]
     public string? NomeArtista { get; set; }
     public ArtistaResponse? Artista { get; set; }
@@ -72,7 +74,7 @@
 
     private async Task Editar()
     {
-        var request = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!);
+        var request = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!, FotoPerfil);
         await artistaAPI.UpdateArtistaAsync(request);
         navigationManager.NavigateTo("/Artistas");
     }

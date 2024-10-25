@@ -4,6 +4,10 @@ namespace ScreenSound.Modelos;
 
 public class Musica
 {
+    public Musica()
+    {
+        
+    }
     public Musica(string nome)
     {
         Nome = nome;
@@ -18,8 +22,7 @@ public class Musica
 
     public void ExibirFichaTecnica()
     {
-        Console.WriteLine($"Nome: {Nome}");
-      
+        Console.WriteLine($"Nome: {Nome}");      
     }
 
     public override string ToString()
