@@ -3,49 +3,51 @@
 
 @inject ArtistaAPI artistaAPI
 @inject NavigationManager navigationManager
-<MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
+@if (Artista is not null)
+{
+    <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
 
-    <MudText Class="mt-8" Typo="Typo.h4">Edição de Artista</MudText>
+        <MudText Class="mt-8" Typo="Typo.h4">Edição de Artista</MudText>
 
-    <MudForm>
+        <MudForm>
 
-        <MudTextField Class="mt-4" T="string" Placeholder="Nome do Artista"
-                      Variant="Variant.Outlined"
-                      @bind-Value="nome"
-                      Required="true"
-                      RequiredError="Campo obrigatório." />
+            <MudTextField Class="mt-4" T="string" Placeholder="Nome do Artista"
+            Variant="Variant.Outlined"
+            @bind-Value="nome"
+            Required="true"
+            RequiredError="Campo obrigatório." />
 
-        <MudTextField Class="mt-4" T="string" Placeholder="Biografia do artista"
-                      Variant="Variant.Outlined"
-                      @bind-Value="biografia"
-                      Lines="4"
-                      Required="true"
-                      RequiredError="Campo obrigatório." />      
+            <MudTextField Class="mt-4" T="string" Placeholder="Biografia do artista"
+            Variant="Variant.Outlined"
+            @bind-Value="biografia"
+            Lines="4"
+            Required="true"
+            RequiredError="Campo obrigatório." />      
 
-        <div class="d-flex align-center justify-end mt-4">
-            <MudButton Variant="Variant.Filled"
-                       @onclick="Voltar"
-                       Color="Color.Primary"
-                       Class="mr-2">
-                Voltar
-            </MudButton>
-            <MudButton Variant="Variant.Filled"
-                       @onclick="Deletar"
-                       Color="Color.Secondary">
-                Deletar
-            </MudButton>
-            <MudButton Variant="Variant.Filled"
-                       @onclick="Editar"
-                       Color="Color.Primary"
-                       Class="ml-auto">
-                Salvar
-            </MudButton>
-        </div>
+            <div class="d-flex align-center justify-end mt-4">
+                <MudButton Variant="Variant.Filled"
+                @onclick="Voltar"
+                Color="Color.Primary"
+                Class="mr-2">
+                    Voltar
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                @onclick="Deletar"
+                Color="Color.Secondary">
+                    Deletar
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                @onclick="Editar"
+                Color="Color.Primary"
+                Class="ml-auto">
+                    Salvar
+                </MudButton>
+            </div>
 
 
-    </MudForm>
-</MudPaper>
-
+        </MudForm>
+    </MudPaper>
+}
 @code {
     private string? nome;
     private string? biografia;

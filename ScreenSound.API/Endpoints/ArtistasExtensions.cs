@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ScreenSound.API.Request;
-using ScreenSound.API.Requests;
-using ScreenSound.API.Response;
 using ScreenSound.Banco;
 using ScreenSound.Modelos;
 using ScreenSound.Web.Requests;
