@@ -11,7 +11,7 @@
     <MudForm>
 
         <MudTextField Class="mt-4" T="string" Placeholder="Nome da música/canção"
-                      @bind-Value="nome"
+                      @bind-Value="Nome"
                       Variant="Variant.Outlined"
                       Required="true"
                       RequiredError="Campo obrigatório." />
@@ -27,7 +27,7 @@
         </MudSelect>
 
         <MudNumericField Class="mt-4" Placeholder="Ano de lançamento"
-                         @bind-Value="anoLancamento"
+                         @bind-Value="AnoLancamento"
                          Variant="Variant.Outlined"
                          Lines="1"
                          Required="true"
@@ -69,13 +69,16 @@
 </MudPaper>
 
 @code {
-    private int? anoLancamento;
-    private string? nome;
+    private int? AnoLancamento;
+
+    private string? Nome;
 
     private ICollection<ArtistaResponse>? artistas;
+
     private ICollection<GeneroResponse>? generos;
 
     private List<GeneroResponse>? GenerosSelecionados { get; set; } = new();
+
     private ArtistaResponse? ArtistaDaMusica { get; set; }
 
     public MusicaResponse? Musica { get; set; }
@@ -86,8 +89,8 @@
     protected override async Task OnInitializedAsync()
     {
         Musica = await musicaAPI.GetMusicaPorNomeAsync(NomeMusica!);
-        anoLancamento = Musica!.anoLancamento;
-        nome = Musica!.Nome;
+        AnoLancamento = Musica!.AnoLancamento;
+        Nome = Musica!.Nome;
         ArtistaDaMusica = new ArtistaResponse(Musica.ArtistaId, Musica.NomeArtista, "", "");
     }
 
@@ -111,6 +114,5 @@
     {        
         await musicaAPI.DeleteMusicaAsync(Musica!.Id);
         navigationManager.NavigateTo("/MusicasPorArtista");
-
     }
 }

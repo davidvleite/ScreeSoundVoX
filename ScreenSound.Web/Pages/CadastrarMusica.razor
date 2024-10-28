@@ -34,7 +34,24 @@
                          Required="true"
                          RequiredError="Campo obrigatório." />
 
-       @*  <MudSelect Class="mt-4" T="GeneroResponse" Label="Gêneros" Variant="Variant.Outlined" ValueChanged="GeneroSelecionado"  AnchorOrigin="Origin.BottomCenter">
+        <MudSelect Class="mt-4" T="ArtistaResponse" Label="Artistas" Variant="Variant.Outlined" ValueChanged="ArtistaSelecionado" AnchorOrigin="Origin.BottomCenter">
+            @if (artistas is not null)
+            {
+                @foreach (var artista in artistas)
+                {
+                    <MudSelectItem Value="artista" />
+                }
+            }
+        </MudSelect>
+
+          <MudNumericField Class="mt-4" Placeholder="Ano de lançamento"
+                         @bind-Value="anoLancamento"
+                         Variant="Variant.Outlined"
+                         Lines="1"
+                         Required="true"
+                         RequiredError="Campo obrigatório." />
+
+           <MudSelect Class="mt-4" T="GeneroResponse" Label="Gêneros" Variant="Variant.Outlined" ValueChanged="GeneroSelecionado" AnchorOrigin="Origin.BottomCenter">
             @if (generos is not null)
             {
                 @foreach (var generos in generos)
@@ -49,7 +66,7 @@
                     <MudAlert Severity="Severity.Info">@(genero.Nome) adicionado como gênero da música.</MudAlert>
                 }
             }
-        </MudSelect> *@
+        </MudSelect>
 
         <div class="d-flex align-center justify-space-between mt-4">
             <MudButton Variant="Variant.Filled"
@@ -66,16 +83,20 @@
         </div>
 
     </MudForm>
+
 </MudPaper>
 
 @code {
     private int anoLancamento;
+
     private string? nome;
 
     private ICollection<ArtistaResponse>? artistas;
+
     private ICollection<GeneroResponse>? generos;   
 
     private List<GeneroResponse>? GenerosSelecionados { get; set; } = new();
+
     private ArtistaResponse? ArtistaDaMusica { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -113,7 +134,6 @@
 
         var musicaRequest = new MusicaRequest(nome!, ArtistaDaMusica!.Id, anoLancamento, GenerosRequest);
         await musicaAPI.AddMusicaAsync(musicaRequest);
-        navigationManager.NavigateTo("/MusicasPorArtista");
-        
+        navigationManager.NavigateTo("/MusicasPorArtista");        
     }
 }

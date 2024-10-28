@@ -1,5 +1,5 @@
 ﻿//ArtistaRequestEdit
-namespace ScreenSound.Web.Requests;
+namespace ScreenSound.API.Requests;
 
 public record ArtistaRequestEdit(int Id, string nome, string bio, string? fotoPerfil)
     : ArtistaRequest(nome, bio, fotoPerfil);

@@ -20,10 +20,14 @@
 
 @code {
     private int tamanho = 8;
+
     private int totalItens;
+
     private int totalPaginas;
+
     private ICollection<MusicaResponse>? musicas;
-    private ICollection<MusicaResponse>? musicaPorPagina;
+
+    private ICollection<MusicaResponse>? musicaPorPagina; 
 
     protected override async Task OnInitializedAsync()
     {

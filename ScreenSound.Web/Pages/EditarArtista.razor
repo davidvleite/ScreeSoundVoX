@@ -43,17 +43,23 @@
                     Salvar
                 </MudButton>
             </div>
-
-
         </MudForm>
     </MudPaper>
 }
+else
+{
+    <MudProgressCircular Indeterminate="true"></MudProgressCircular>
+}
 @code {
     private string? nome;
+
     private string? biografia;
+
     private string? FotoPerfil;
+
     [Parameter]
     public string? NomeArtista { get; set; }
+
     public ArtistaResponse? Artista { get; set; }
 
     protected override  async Task OnInitializedAsync()
