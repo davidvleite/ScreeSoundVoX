@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ScreenSound.Menus
 {
-    internal class MenuMostrarMusicasPorAno: Menu
+    internal class MenuMostrarMusicasPorAno : Menu
     {
         public override void Executar(DAL<Artista> artistaDAL)
         {
