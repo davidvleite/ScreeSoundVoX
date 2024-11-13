@@ -1,6 +1,9 @@
 ﻿@page "/Artistas"
+@using Microsoft.AspNetCore.Authorization
 @inject ArtistaAPI artistaAPI
+@inject NavigationManager navigationManager
 
+<PageTitle>Artistas</PageTitle>
 <MudStack Class="mt-4 mb-4" Row="true" Justify="Justify.SpaceBetween">
     <MudText Class="mb-4" Typo="Typo.h4">Artistas cadastrados</MudText>
     <MudPagination Count="@totalPaginas" SelectedChanged="PaginaMudou"></MudPagination>
@@ -19,6 +22,10 @@
         }
     </MudGrid>
 }
+else
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
 
 
 @code {
@@ -27,14 +34,15 @@
     private int totalItens;
     private int totalPaginas;
     private ICollection<ArtistaResponse>? artistasPorPagina;
+    private ICollection<ArtistaResponse>? listaCompleta = Enumerable.Empty<ArtistaResponse>().ToList();
 
     protected override async Task OnInitializedAsync()
     {
-        artistas = await artistaAPI.GetArtistasAsync();
-        if( artistas is not null)
+        listaCompleta = await artistaAPI.GetArtistasAsync();
+        if (listaCompleta is not null)
         {
-            artistas = artistas.OrderByDescending(a => a.Id).ToList();
-            totalItens = artistas.Count();
+            listaCompleta = listaCompleta.OrderByDescending(a => a.Id).ToList();
+            totalItens = listaCompleta.Count();
             totalPaginas = Convert.ToInt32(Math.Ceiling((totalItens * 1.0) / tamanho));
             this.PaginaMudou(1);
         }
@@ -43,6 +51,6 @@
     private void PaginaMudou(int pageNumber)
     {
         var indice = pageNumber - 1;
-        artistasPorPagina = artistas!.Skip(tamanho * indice).Take(tamanho).ToList();
+        artistasPorPagina = listaCompleta!.Skip(tamanho * indice).Take(tamanho).ToList();
     }
 }

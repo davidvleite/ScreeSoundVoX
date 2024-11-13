@@ -5,29 +5,33 @@ using ScreenSound.Web.Response;
 
 namespace ScreenSound.Web.Services
 {
-    public class AuthAPI(IHttpClientFactory factory): AuthenticationStateProvider
+    public class AuthAPI(IHttpClientFactory factory) : AuthenticationStateProvider
     {
         private readonly HttpClient _httpClient = factory.CreateClient("API");
-
+        private bool autenticado = false;
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
+            autenticado = false;
             var pessoa = new ClaimsPrincipal();
-            var info = await _httpClient.GetFromJsonAsync<InfoPessoaResponse>("auth/manage/info");
-            if (info is not null)
+            var response = await _httpClient.GetAsync("auth/manage/info");
+
+            if (response.IsSuccessStatusCode)
             {
+                var info = await response.Content.ReadFromJsonAsync<InforPessoaResponse>();
                 Claim[] dados =
-                    [
+                [
                     new Claim(ClaimTypes.Name, info.Email),
                     new Claim(ClaimTypes.Email, info.Email)
-                    ];
+                ];
 
                 var identity = new ClaimsIdentity(dados, "Cookies");
                 pessoa = new ClaimsPrincipal(identity);
+                autenticado = true;
             }
+
             return new AuthenticationState(pessoa);
         }
 
-        //auth/login?useCookies=true
         public async Task<AuthResponse> LoginAsync(string email, string senha)
         {
             var response = await _httpClient.PostAsJsonAsync("auth/login?useCookies=true", new
@@ -38,10 +42,22 @@ namespace ScreenSound.Web.Services
 
             if (response.IsSuccessStatusCode)
             {
+                NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
                 return new AuthResponse { Sucesso = true };
 
             }
-            return new AuthResponse { Sucesso = false, Erros = ["Login/Senha inválidos"]};
+            return new AuthResponse { Sucesso = false, Erros = ["Login/Senha inválidos"] };
+        }
+        public async Task LogoutAsync()
+        {
+            await _httpClient.PostAsync("auth/logout", null);
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        }
+
+        public async Task<bool> VerificaAutenticado()
+        {
+            await GetAuthenticationStateAsync();
+            return autenticado;
         }
     }
 }

@@ -1,6 +1,10 @@
 ﻿@page "/CadastrarArtista"
+@using ScreenSound.Web.Requests
 @inject ArtistaAPI artistaAPI
 @inject NavigationManager navigationManager
+@inject ISnackbar Snackbar
+
+<PageTitle>Cadastrar Artista</PageTitle>
 <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
 
     <MudText Class="mt-8" Typo="Typo.h4">Cadastro do Artista</MudText>
@@ -18,58 +22,75 @@
                       @bind-Value="biografia"
                       Lines="4"
                       Required="true"
-                      RequiredError="Campo obrigatório." />      
-
-        <MudImage Class="mt-4" src="@fileImage" />
-        <MudFileUpload T="IBrowserFile" Accept=".jpeg" FilesChanged="UploadFile">
-            <ActivatorContent>
-                <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           StartIcon="@Icons.Material.Filled.PhotoCamera">
-                    Foto de Perfil
-                </MudButton>
-            </ActivatorContent>
-        </MudFileUpload>
-
+                      RequiredError="Campo obrigatório." />
+        <div class="d-flex align-center justify-space-between mt-4">
+            <MudCardContent>
+                <MudImage Class="mt-4" src="@fileImage" />
+                <MudFileUpload T="IBrowserFile" Accept=".jpeg" FilesChanged="UploadFile">
+                    <ActivatorContent>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.PhotoCamera">
+                            Foto de Perfil
+                        </MudButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+            </MudCardContent>
+        </div>
         <div class="d-flex align-center justify-end mt-4">
             <MudButton Variant="Variant.Filled"
                        @onclick="Voltar"
-                       Color="Color.Primary"
-                       Class="mr-2">
-                Voltar
+                        Color="Color.Info" 
+                        Class="ml-3">
+                        Voltar
             </MudButton>
             <MudButton Variant="Variant.Filled"
+                       Class="ml-auto"
                        @onclick="Cadastrar"
+                       Disabled="@(!success)"
                        Color="Color.Primary">
-                Cadastrar
+                       Cadastrar
             </MudButton>
         </div>
-
 
     </MudForm>
 </MudPaper>
 
 @code {
+    bool success;
+
+    string[] errors = { };
+
+    MudForm form;
+
     private string? nome;
 
     private string? biografia;
 
-    private string? fileImage;
+    private string fileImage = string.Empty;
 
-    private string? fotoPerfil;
+    private string fotoPerfil = string.Empty;
 
     private async Task Cadastrar()
     {
-        var request = new ArtistaRequest(nome!, biografia!, fotoPerfil);
-        await artistaAPI.AddArtistaAsync(request);
-        navigationManager.NavigateTo("/Artistas");
+        try
+        {
+            var request = new ArtistaRequest(nome!, biografia!, fotoPerfil);
+            await artistaAPI.AddArtistaAsync(request);
+            navigationManager.NavigateTo("/Artistas");
+        }catch (Exception)
+        {
+            
+        }
     }
 
     private void Voltar()
     {
-         navigationManager.NavigateTo("/Artistas");
+        navigationManager.NavigateTo("/Artistas");
     }
+
+    IList<IBrowserFile> files = new List<IBrowserFile>();
 
     private async Task UploadFile(IBrowserFile file)
     {
@@ -84,6 +105,6 @@
         await fileStream.CopyToAsync(memoryStream);
         var imageUpload = Convert.ToBase64String(memoryStream.ToArray());
         fileImage = $"data: {format};base64,{imageUpload}";
-        fotoPerfil = imageUpload;        
+        fotoPerfil = imageUpload;
     }
 }
