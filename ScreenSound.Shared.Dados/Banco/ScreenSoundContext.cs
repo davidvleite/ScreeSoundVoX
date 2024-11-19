@@ -14,6 +14,8 @@ namespace ScreenSound.Banco
 
         public DbSet<Genero> Generos { get; set; }
 
+        public DbSet<AvaliacaoArtista> AvaliacaoArtistas { get; set; }
+
         private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ScreenSound;Integrated Security=True;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
         public ScreenSoundContext()
         {
@@ -39,6 +41,8 @@ namespace ScreenSound.Banco
             modelBuilder.Entity<Musica>()                
                 .HasMany(c => c.Generos)
                 .WithMany(c => c.Musicas);
+
+            modelBuilder.Entity<AvaliacaoArtista>().HasKey(a => new { a.ArtistaId, a.PessoaId });
         }
     }
 }
